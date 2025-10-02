@@ -1,0 +1,20 @@
+name: 'Helm Package'
+description: 'Package a Helm chart'
+inputs:
+  chart-dir:
+    description: 'Path to the Helm chart directory'
+    required: true
+outputs:
+  package-name:
+    description: 'Name of the generated package'
+    value: ${{ steps.package.outputs.package-name }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Package Helm chart
+      id: package
+      shell: bash
+      run: |
+        CHART_DIR="${{ inputs.chart-dir }}"
+        PACKAGE_NAME=$(helm package "$CHART_DIR" | awk '{print $8}')
+        echo "package-name=$PACKAGE_NAME" >> $GITHUB_OUTPUT

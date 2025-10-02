@@ -1,0 +1,20 @@
+name: 'Helm Publish'
+description: 'Publish a Helm chart to GHCR'
+inputs:
+  package-name:
+    description: 'Name of the Helm package to publish'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish Helm chart
+      shell: bash
+      run: |
+        helm push "${{ inputs.package-name }}" oci://ghcr.io/${{ github.repository_owner }}
