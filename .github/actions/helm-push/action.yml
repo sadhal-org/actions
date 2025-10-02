@@ -15,7 +15,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ auth }}
+        password: ${{ inputs.auth }}
 
     - name: Publish Helm chart
       shell: bash
